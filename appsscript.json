@@ -4,7 +4,7 @@
     "enabledAdvancedServices": [
       {
         "userSymbol": "Drive",
-        "version": "v3",
+        "version": "v2",
         "serviceId": "drive"
       },
       {
@@ -14,6 +14,11 @@
       }
     ]
   },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email"
+  ],
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8"
 }
