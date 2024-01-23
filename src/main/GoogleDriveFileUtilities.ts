@@ -40,6 +40,16 @@ function isUserEditor(fileOrFolder: DriveFile | DriveFolder, userEmail: string):
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getFilesByType(mimeType: string): DriveFile[] {
+  const iterator = DriveApp.getFilesByType(mimeType)
+  const result: DriveFile[] = []
+  while (iterator.hasNext()) {
+    result.push(iterator.next())
+  }
+  return result
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getContainingFoldersWithEditPermissions(file: DriveFile): DriveFolder[] {
   return getContainingFolders(file).filter((folder) => isUserEditor(folder, Session.getEffectiveUser().getEmail()))
 }
