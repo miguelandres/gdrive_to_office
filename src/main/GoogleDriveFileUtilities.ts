@@ -43,3 +43,12 @@ function isUserEditor(fileOrFolder: DriveFile | DriveFolder, userEmail: string):
 function getContainingFoldersWithEditPermissions(file: DriveFile): DriveFolder[] {
   return getContainingFolders(file).filter((folder) => isUserEditor(folder, Session.getEffectiveUser().getEmail()))
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isFileNewer(file: DriveFile, lastUpdated: GoogleAppsScript.Base.Date): boolean {
+  if (file.getLastUpdated() >= lastUpdated) {
+    Logger.log(`Found ${file.getName()} with a timestamp ${file.getLastUpdated().toDateString()} newer than ${lastUpdated.toDateString()}`)
+    return true
+  }
+  return false
+}

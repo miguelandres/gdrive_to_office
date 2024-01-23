@@ -31,12 +31,25 @@ abstract class FileConverter {
     this.mimeType = file.getMimeType()
     this.mimeTypeMapping = mimeTypeMapping
     this.verifyMimeType()
+    Logger.log(`Created ${this.constructor.name} for ${this.name} (${this.mimeType})`)
   }
 
+  /**
+   * Verifies that the mime type in the file is actually the type we expect
+   * @throws UnexpectedMimeTypeError if file is the wrong type
+   */
   abstract verifyMimeType(): void
 
-  convertToOffice(): void { }
-  convertToGoogle(): void { }
+  /**
+   * Converts the current file to Office formats
+   * @returns Number of new files generated
+   */
+  convertToOffice(): number { return 0 }
+  /**
+   * Converts the current file to Google formats
+   * @returns Number of new files generated
+   */
+  convertToGoogle(): number { return 0 }
 }
 
 class GoogleFileConverter extends FileConverter {
@@ -54,15 +67,39 @@ class GoogleFileConverter extends FileConverter {
     return `${this.name}.${this.mimeTypeMapping.extension}`
   }
 
-  getOfficeFile(folder: DriveFolder): DriveFile | undefined {
+  getOfficeFiles(folder: DriveFolder): DriveFile[] {
     const filesResult = folder.getFilesByName(this.getOfficeFileName())
-    // Assume only one file returned.
-    if (filesResult.hasNext())
-      return filesResult.next()
-    return undefined
+    const result: DriveFile[] = []
+    while (filesResult.hasNext())
+      result.push(filesResult.next())
+    // double check the MIME type ;)
+    return result.filter((found) => found.getMimeType() == this.mimeTypeMapping.office)
   }
 
-  convertToOffice(): void {
+  convertToOffice(): number {
+    // Find all folders that need new copies
+    const folders = getContainingFoldersWithEditPermissions(this.file)
+    const fileName = this.getOfficeFileName()
+    const lastUpdated: GoogleAppsScript.Base.Date = this.file.getLastUpdated()
+    let conversionCount = 0
+    folders.forEach((folder) => {
+      const existingFiles = this.getOfficeFiles(folder)
+
+      if (existingFiles.find((found) => isFileNewer(found, lastUpdated)) === undefined) {
+        // Didn't find an office version that was newer! Need to create it, How fun!
+        const conversionUrl = `https://www.googleapis.com/drive/v3/files/${this.file.getId()}/export?mimeType=${this.mimeTypeMapping.office}`
+
+        const blob = UrlFetchApp.fetch(conversionUrl, {
+          method: "get",
+          headers: { "Authorization": "Bearer " + ScriptApp.getOAuthToken() },
+          muteHttpExceptions: true
+        }).getBlob()
+        folder.createFile(blob).setName(fileName)
+        Logger.log(`Created file ${fileName} in ${folder.getName()}`)
+        conversionCount++
+      }
+    })
+    return conversionCount
   }
 
 }
@@ -76,6 +113,10 @@ class OfficeFileConverter extends FileConverter {
     if (this.mimeType != this.mimeTypeMapping.office) {
       throw new UnexpectedMimeTypeError(this.file, this.mimeTypeMapping.office)
     }
+  }
+
+  convertToGoogle(): number {
+    throw Error("Unimplemented!")
   }
 }
 
