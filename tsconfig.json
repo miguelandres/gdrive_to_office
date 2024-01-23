@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "esnext"
+    ],
+    "experimentalDecorators": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
+}
