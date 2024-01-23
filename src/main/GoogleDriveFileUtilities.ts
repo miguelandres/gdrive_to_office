@@ -30,13 +30,9 @@ function getContainingFolders(file: GoogleAppsScript.Drive.File): GoogleAppsScri
 
 function isUserEditor(fileOrFolder: GoogleAppsScript.Drive.File | GoogleAppsScript.Drive.Folder, userEmail: string): boolean {
   const permission = fileOrFolder.getAccess(userEmail)
-  switch (permission) {
-    case GoogleAppsScript.Drive.Permission.EDIT:
-    case GoogleAppsScript.Drive.Permission.OWNER:
-      return true
-    default:
-      return false
-  }
+  if (permission == DriveApp.Permission.EDIT || permission == DriveApp.Permission.OWNER)
+    return true
+  return false
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
