@@ -21,10 +21,10 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class UnexpectedMimeTypeError extends Error {
-  file: DriveFile
+  file: GoogleAppsScript.Drive.File
   mimeType: string
   expectedMimeType: string
-  constructor(file: DriveFile, expectedMimeType: string) {
+  constructor(file: GoogleAppsScript.Drive.File, expectedMimeType: string) {
     super(`File ${file.getName()} has unexpected MIME type ${file.getMimeType()}, was expecting ${expectedMimeType}`)
 
     this.mimeType = file.getMimeType()

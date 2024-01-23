@@ -21,18 +21,18 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function getContainingFolders(file: DriveFile): DriveFolder[] {
+function getContainingFolders(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
   const parents = file.getParents()
-  const folders: DriveFolder[] = []
+  const folders: GoogleAppsScript.Drive.Folder[] = []
   while (parents.hasNext()) { folders.push(parents.next()) }
   return folders
 }
 
-function isUserEditor(fileOrFolder: DriveFile | DriveFolder, userEmail: string): boolean {
+function isUserEditor(fileOrFolder: GoogleAppsScript.Drive.File | GoogleAppsScript.Drive.Folder, userEmail: string): boolean {
   const permission = fileOrFolder.getAccess(userEmail)
   switch (permission) {
-    case DrivePermission.EDIT:
-    case DrivePermission.OWNER:
+    case GoogleAppsScript.Drive.Permission.EDIT:
+    case GoogleAppsScript.Drive.Permission.OWNER:
       return true
     default:
       return false
@@ -40,9 +40,9 @@ function isUserEditor(fileOrFolder: DriveFile | DriveFolder, userEmail: string):
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getFilesByType(mimeType: string): DriveFile[] {
+function getFilesByType(mimeType: string): GoogleAppsScript.Drive.File[] {
   const iterator = DriveApp.getFilesByType(mimeType)
-  const result: DriveFile[] = []
+  const result: GoogleAppsScript.Drive.File[] = []
   while (iterator.hasNext()) {
     result.push(iterator.next())
   }
@@ -50,12 +50,12 @@ function getFilesByType(mimeType: string): DriveFile[] {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getContainingFoldersWithEditPermissions(file: DriveFile): DriveFolder[] {
+function getContainingFoldersWithEditPermissions(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
   return getContainingFolders(file).filter((folder) => isUserEditor(folder, Session.getEffectiveUser().getEmail()))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isFileNewer(file: DriveFile, lastUpdated: GoogleAppsScript.Base.Date): boolean {
+function isFileNewer(file: GoogleAppsScript.Drive.File, lastUpdated: GoogleAppsScript.Base.Date): boolean {
   if (file.getLastUpdated() >= lastUpdated) {
     Logger.log(`Found ${file.getName()} with a timestamp ${file.getLastUpdated().toDateString()} newer than ${lastUpdated.toDateString()}`)
     return true

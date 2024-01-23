@@ -20,12 +20,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 abstract class FileConverter {
-  readonly file: DriveFile
+  readonly file: GoogleAppsScript.Drive.File
   readonly mimeType: string
   readonly mimeTypeMapping: MimeTypeMapping
   readonly name: string
 
-  constructor(file: DriveFile, mimeTypeMapping: MimeTypeMapping) {
+  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
     this.file = file
     this.name = file.getName()
     this.mimeType = file.getMimeType()
@@ -53,7 +53,7 @@ abstract class FileConverter {
 }
 
 class GoogleFileConverter extends FileConverter {
-  constructor(file: DriveFile, mimeTypeMapping: MimeTypeMapping) {
+  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
     super(file, mimeTypeMapping)
   }
 
@@ -67,9 +67,9 @@ class GoogleFileConverter extends FileConverter {
     return `${this.name}.${this.mimeTypeMapping.extension}`
   }
 
-  getOfficeFiles(folder: DriveFolder): DriveFile[] {
+  getOfficeFiles(folder: GoogleAppsScript.Drive.Folder): GoogleAppsScript.Drive.File[] {
     const filesResult = folder.getFilesByName(this.getOfficeFileName())
-    const result: DriveFile[] = []
+    const result: GoogleAppsScript.Drive.File[] = []
     while (filesResult.hasNext())
       result.push(filesResult.next())
     // double check the MIME type ;)
@@ -105,7 +105,7 @@ class GoogleFileConverter extends FileConverter {
 }
 
 class OfficeFileConverter extends FileConverter {
-  constructor(file: DriveFile, mimeTypeMapping: MimeTypeMapping) {
+  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
     super(file, mimeTypeMapping)
   }
 
@@ -122,7 +122,7 @@ class OfficeFileConverter extends FileConverter {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createFileConverter(
-  file: DriveFile
+  file: GoogleAppsScript.Drive.File
 ): FileConverter {
   const mimeType = file.getMimeType()
   const googleMapping = GOOGLE_TO_OFFICE.get(mimeType)

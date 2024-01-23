@@ -21,9 +21,9 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class UnsupportedMimeTypeError extends Error {
-  file: DriveFile
+  file: GoogleAppsScript.Drive.File
   mimeType: string
-  constructor(file: DriveFile) {
+  constructor(file: GoogleAppsScript.Drive.File) {
     super(`File ${file.getName()} has unsupported MIME type ${file.getMimeType()}`)
 
     this.mimeType = file.getMimeType()
