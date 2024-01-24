@@ -78,7 +78,7 @@ class GoogleFileConverter extends FileConverter {
 
   convertToOffice(): number {
     // Find all folders that need new copies
-    const folders = getContainingFoldersWithEditPermissions(this.file)
+    const folders = getContainingFoldersWithOwnerPermissions(this.file)
     const fileName = this.getOfficeFileName()
     const lastUpdated: GoogleAppsScript.Base.Date = this.file.getLastUpdated()
     let conversionCount = 0

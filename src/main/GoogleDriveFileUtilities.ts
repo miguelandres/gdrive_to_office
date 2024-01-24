@@ -51,6 +51,11 @@ function getContainingFoldersWithEditPermissions(file: GoogleAppsScript.Drive.Fi
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getContainingFoldersWithOwnerPermissions(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
+  return getContainingFolders(file).filter((folder) => folder.getOwner().getEmail() == Session.getEffectiveUser().getEmail())
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isFileNewer(file: GoogleAppsScript.Drive.File, lastUpdated: GoogleAppsScript.Base.Date): boolean {
   if (file.getLastUpdated() >= lastUpdated) {
     Logger.log(`Found ${file.getName()} with a timestamp ${file.getLastUpdated().toDateString()} newer than ${lastUpdated.toDateString()}`)
