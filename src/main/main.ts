@@ -26,7 +26,8 @@ function convertToOffice() {
 
   Logger.log(`Starting conversion to office for all files for ${userEmail}`)
   GOOGLE_TYPES.forEach(googleType => {
-    const converters = getFilesByType(googleType).map((file) => createFileConverter(file))
+    const converters =
+      getFilesByType(googleType).map((file) => createFileConverter(file))
     conversionCount = converters
       .map((fileConverter) => fileConverter.convertToOffice())
       .reduce(

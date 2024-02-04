@@ -25,13 +25,17 @@ abstract class FileConverter {
   readonly mimeTypeMapping: MimeTypeMapping
   readonly name: string
 
-  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
+  constructor(
+    file: GoogleAppsScript.Drive.File,
+    mimeTypeMapping: MimeTypeMapping
+  ) {
     this.file = file
     this.name = file.getName()
     this.mimeType = file.getMimeType()
     this.mimeTypeMapping = mimeTypeMapping
     this.verifyMimeType()
-    Logger.log(`Created ${this.constructor.name} for ${this.name} (${this.mimeType})`)
+    Logger.log(
+      `Created ${this.constructor.name} for ${this.name} (${this.mimeType})`)
   }
 
   /**
@@ -53,7 +57,10 @@ abstract class FileConverter {
 }
 
 class GoogleFileConverter extends FileConverter {
-  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
+  constructor(
+    file: GoogleAppsScript.Drive.File,
+    mimeTypeMapping: MimeTypeMapping
+  ) {
     super(file, mimeTypeMapping)
   }
 
@@ -67,13 +74,16 @@ class GoogleFileConverter extends FileConverter {
     return `${this.name}.${this.mimeTypeMapping.extension}`
   }
 
-  getOfficeFiles(folder: GoogleAppsScript.Drive.Folder): GoogleAppsScript.Drive.File[] {
+  getOfficeFiles(
+    folder: GoogleAppsScript.Drive.Folder
+  ): GoogleAppsScript.Drive.File[] {
     const filesResult = folder.getFilesByName(this.getOfficeFileName())
     const result: GoogleAppsScript.Drive.File[] = []
     while (filesResult.hasNext())
       result.push(filesResult.next())
     // double check the MIME type ;)
-    return result.filter((found) => found.getMimeType() == this.mimeTypeMapping.office)
+    return result.filter((found) =>
+      found.getMimeType() == this.mimeTypeMapping.office)
   }
 
   convertToOffice(): number {
@@ -85,9 +95,12 @@ class GoogleFileConverter extends FileConverter {
     folders.forEach((folder) => {
       const existingFiles = this.getOfficeFiles(folder)
 
-      if (existingFiles.find((found) => isFileNewer(found, lastUpdated)) === undefined) {
-        // Didn't find an office version that was newer! Need to create it, How fun!
-        const conversionUrl = `https://www.googleapis.com/drive/v3/files/${this.file.getId()}/export?mimeType=${this.mimeTypeMapping.office}`
+      if (existingFiles
+        .find((found) => isFileNewer(found, lastUpdated)) === undefined) {
+        // Didn't find an office version that was newer!
+        // Need to create it, How fun!
+        const conversionUrl =
+          `https://www.googleapis.com/drive/v3/files/${this.file.getId()}/export?mimeType=${this.mimeTypeMapping.office}`
 
         const blob = UrlFetchApp.fetch(conversionUrl, {
           method: "get",
@@ -105,7 +118,10 @@ class GoogleFileConverter extends FileConverter {
 }
 
 class OfficeFileConverter extends FileConverter {
-  constructor(file: GoogleAppsScript.Drive.File, mimeTypeMapping: MimeTypeMapping) {
+  constructor(
+    file: GoogleAppsScript.Drive.File,
+    mimeTypeMapping: MimeTypeMapping
+  ) {
     super(file, mimeTypeMapping)
   }
 

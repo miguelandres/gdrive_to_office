@@ -21,16 +21,22 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function getContainingFolders(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
+function getContainingFolders(
+  file: GoogleAppsScript.Drive.File
+): GoogleAppsScript.Drive.Folder[] {
   const parents = file.getParents()
   const folders: GoogleAppsScript.Drive.Folder[] = []
   while (parents.hasNext()) { folders.push(parents.next()) }
   return folders
 }
 
-function isUserEditor(fileOrFolder: GoogleAppsScript.Drive.File | GoogleAppsScript.Drive.Folder, userEmail: string): boolean {
+function isUserEditor(
+  fileOrFolder: GoogleAppsScript.Drive.File | GoogleAppsScript.Drive.Folder,
+  userEmail: string
+): boolean {
   const permission = fileOrFolder.getAccess(userEmail)
-  if (permission == DriveApp.Permission.EDIT || permission == DriveApp.Permission.OWNER)
+  if (permission == DriveApp.Permission.EDIT ||
+    permission == DriveApp.Permission.OWNER)
     return true
   return false
 }
@@ -46,19 +52,34 @@ function getFilesByType(mimeType: string): GoogleAppsScript.Drive.File[] {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getContainingFoldersWithEditPermissions(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
-  return getContainingFolders(file).filter((folder) => isUserEditor(folder, Session.getEffectiveUser().getEmail()))
+function getContainingFoldersWithEditPermissions(
+  file: GoogleAppsScript.Drive.File
+): GoogleAppsScript.Drive.Folder[] {
+  return getContainingFolders(file)
+    .filter((folder) =>
+      isUserEditor(folder, Session.getEffectiveUser().getEmail()))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getContainingFoldersWithOwnerPermissions(file: GoogleAppsScript.Drive.File): GoogleAppsScript.Drive.Folder[] {
-  return getContainingFolders(file).filter((folder) => folder.getOwner().getEmail() == Session.getEffectiveUser().getEmail())
+function getContainingFoldersWithOwnerPermissions(
+  file: GoogleAppsScript.Drive.File
+): GoogleAppsScript.Drive.Folder[] {
+  return getContainingFolders(file)
+    .filter((folder) =>
+      folder.getOwner().getEmail() == Session.getEffectiveUser().getEmail())
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isFileNewer(file: GoogleAppsScript.Drive.File, lastUpdated: GoogleAppsScript.Base.Date): boolean {
+function isFileNewer(
+  file: GoogleAppsScript.Drive.File,
+  lastUpdated: GoogleAppsScript.Base.Date
+): boolean {
   if (file.getLastUpdated() >= lastUpdated) {
-    Logger.log(`Found ${file.getName()} with a timestamp ${file.getLastUpdated().toDateString()} newer than ${lastUpdated.toDateString()}`)
+    Logger.log(
+      `Found ${file.getName()} with a timestamp ` +
+      `${file.getLastUpdated().toDateString()} newer than ` +
+      lastUpdated.toDateString()
+    )
     return true
   }
   return false

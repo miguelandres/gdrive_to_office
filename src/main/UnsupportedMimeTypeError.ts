@@ -24,7 +24,8 @@ class UnsupportedMimeTypeError extends Error {
   file: GoogleAppsScript.Drive.File
   mimeType: string
   constructor(file: GoogleAppsScript.Drive.File) {
-    super(`File ${file.getName()} has unsupported MIME type ${file.getMimeType()}`)
+    super(
+      `File ${file.getName()} has unsupported MIME type ${file.getMimeType()}`)
 
     this.mimeType = file.getMimeType()
     this.file = file

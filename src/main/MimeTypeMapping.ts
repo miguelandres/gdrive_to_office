@@ -50,10 +50,14 @@ const SPREADSHEET = new MimeTypeMapping(
 
 const ALL_MAPPINGS = [DOCUMENT, PRESENTATION, SPREADSHEET]
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const GOOGLE_TO_OFFICE = new Map(ALL_MAPPINGS.map(mapping => [mapping.google, mapping] as const))
+const GOOGLE_TO_OFFICE = new Map(
+  ALL_MAPPINGS.map(mapping => [mapping.google, mapping] as const)
+)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const GOOGLE_TYPES = ALL_MAPPINGS.map(mapping => mapping.google)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OFFICE_TO_GOOGLE = new Map(ALL_MAPPINGS.map(mapping => [mapping.office, mapping] as const))
+const OFFICE_TO_GOOGLE = new Map(
+  ALL_MAPPINGS.map(mapping => [mapping.office, mapping] as const)
+)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const OFFICE_TYPES = ALL_MAPPINGS.map(mapping => mapping.office)
