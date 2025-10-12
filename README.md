@@ -29,23 +29,40 @@ npm install -g @google/clasp
 
 # Login into your google account with clasp
 clasp login
-
-# Install autocomplete for Google Apps Script
-npm install --save @types/google-apps-script
-
-# Add all the ESLint stuff
-npm install @typescript-eslint/eslint-plugin@latest --save-dev
-npm install --save-dev @typescript-eslint/parser @typescript-eslint/eslint-plugin
-npm install --save-dev eslint-config-prettier
-npm i -D @stylistic/eslint-plugin
-npm install eslint
 ```
 
-## How to deploy and run
+### Setting up your own Google script
 
-When you're done with your local edits, use `clasp push` to push them to Google.
+For anyone other than the original author, please remove the `.clasp-dev.json`
+and `.clasp-prod.json` files and initialize them again using clasp create.
 
-You can then use `clasp open` to open the script on your browser and run it from
-there.
+This clasp configuration is set to my own instance of the script on my Google
+account to which you likely have no access.
 
-Alternatively you can use `clasp run` but I haven't tried that.
+Therefore run the following commands before doing anything
+
+```sh
+rm .clasp.json
+# Create a new standalone script in your account
+clasp create
+```
+
+## Run Lint
+
+```sh
+npm run lint
+```
+
+## Run Tests
+
+```sh
+npm run test
+```
+
+## Deploy
+
+```sh
+npm run deploy
+
+npm run deploy:prod
+```
