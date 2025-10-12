@@ -1,5 +1,3 @@
-
-
 // Copyright (c) 2024 Miguel Barreto and others
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,66 +19,73 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function getContainingFolders(
+export function getContainingFolders(
   file: GoogleAppsScript.Drive.File
 ): GoogleAppsScript.Drive.Folder[] {
-  const parents = file.getParents()
-  const folders: GoogleAppsScript.Drive.Folder[] = []
-  while (parents.hasNext()) { folders.push(parents.next()) }
-  return folders
+  const parents = file.getParents();
+  const folders: GoogleAppsScript.Drive.Folder[] = [];
+  while (parents.hasNext()) {
+    folders.push(parents.next());
+  }
+  return folders;
 }
 
-function isUserEditor(
+export function isUserEditor(
   fileOrFolder: GoogleAppsScript.Drive.File | GoogleAppsScript.Drive.Folder,
   userEmail: string
 ): boolean {
-  const permission = fileOrFolder.getAccess(userEmail)
-  if (permission == DriveApp.Permission.EDIT ||
-    permission == DriveApp.Permission.OWNER)
-    return true
-  return false
+  const permission = fileOrFolder.getAccess(userEmail);
+  if (
+    permission === DriveApp.Permission.EDIT ||
+    permission === DriveApp.Permission.OWNER
+  )
+    return true;
+  return false;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getFilesByType(mimeType: string): GoogleAppsScript.Drive.File[] {
-  const iterator = DriveApp.getFilesByType(mimeType)
-  const result: GoogleAppsScript.Drive.File[] = []
+export function getFilesByType(
+  mimeType: string
+): GoogleAppsScript.Drive.File[] {
+  const iterator = DriveApp.getFilesByType(mimeType);
+  const result: GoogleAppsScript.Drive.File[] = [];
   while (iterator.hasNext()) {
-    result.push(iterator.next())
+    result.push(iterator.next());
   }
-  return result
+  return result;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getContainingFoldersWithEditPermissions(
+export function getContainingFoldersWithEditPermissions(
   file: GoogleAppsScript.Drive.File
 ): GoogleAppsScript.Drive.Folder[] {
-  return getContainingFolders(file)
-    .filter((folder) =>
-      isUserEditor(folder, Session.getEffectiveUser().getEmail()))
+  return getContainingFolders(file).filter(folder =>
+    isUserEditor(folder, Session.getEffectiveUser().getEmail())
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getContainingFoldersWithOwnerPermissions(
+export function getContainingFoldersWithOwnerPermissions(
   file: GoogleAppsScript.Drive.File
 ): GoogleAppsScript.Drive.Folder[] {
-  return getContainingFolders(file)
-    .filter((folder) =>
-      folder.getOwner().getEmail() == Session.getEffectiveUser().getEmail())
+  return getContainingFolders(file).filter(
+    folder =>
+      folder.getOwner().getEmail() === Session.getEffectiveUser().getEmail()
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isFileNewer(
+export function isFileNewer(
   file: GoogleAppsScript.Drive.File,
   lastUpdated: GoogleAppsScript.Base.Date
 ): boolean {
   if (file.getLastUpdated() >= lastUpdated) {
     Logger.log(
       `Found ${file.getName()} with a timestamp ` +
-      `${file.getLastUpdated().toDateString()} newer than ` +
-      lastUpdated.toDateString()
-    )
-    return true
+        `${file.getLastUpdated().toDateString()} newer than ` +
+        lastUpdated.toDateString()
+    );
+    return true;
   }
-  return false
+  return false;
 }

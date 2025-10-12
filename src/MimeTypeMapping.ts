@@ -20,44 +20,44 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 class MimeTypeMapping {
-  google: string
-  office: string
-  extension: string
+  google: string;
+  office: string;
+  extension: string;
   constructor(google: string, office: string, extension: string) {
-    this.google = google
-    this.office = office
-    this.extension = extension
+    this.google = google;
+    this.office = office;
+    this.extension = extension;
   }
 }
 
 const DOCUMENT = new MimeTypeMapping(
-  "application/vnd.google-apps.document",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "docx"
-)
+  'application/vnd.google-apps.document',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'docx'
+);
 
 const PRESENTATION = new MimeTypeMapping(
-  "application/vnd.google-apps.presentation",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "pptx"
-)
+  'application/vnd.google-apps.presentation',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'pptx'
+);
 
 const SPREADSHEET = new MimeTypeMapping(
-  "application/vnd.google-apps.spreadsheet",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "xlsx"
-)
+  'application/vnd.google-apps.spreadsheet',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'xlsx'
+);
 
-const ALL_MAPPINGS = [DOCUMENT, PRESENTATION, SPREADSHEET]
+const ALL_MAPPINGS = [DOCUMENT, PRESENTATION, SPREADSHEET];
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const GOOGLE_TO_OFFICE = new Map(
   ALL_MAPPINGS.map(mapping => [mapping.google, mapping] as const)
-)
+);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const GOOGLE_TYPES = ALL_MAPPINGS.map(mapping => mapping.google)
+const GOOGLE_TYPES = ALL_MAPPINGS.map(mapping => mapping.google);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const OFFICE_TO_GOOGLE = new Map(
   ALL_MAPPINGS.map(mapping => [mapping.office, mapping] as const)
-)
+);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OFFICE_TYPES = ALL_MAPPINGS.map(mapping => mapping.office)
+const OFFICE_TYPES = ALL_MAPPINGS.map(mapping => mapping.office);

@@ -20,21 +20,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function convertToOffice() {
-  const userEmail = Session.getEffectiveUser().getEmail()
-  let conversionCount = 0
+class UnsupportedMimeTypeError extends Error {
+  file: GoogleAppsScript.Drive.File;
+  mimeType: string;
+  constructor(file: GoogleAppsScript.Drive.File) {
+    super(
+      `File ${file.getName()} has unsupported MIME type ${file.getMimeType()}`
+    );
 
-  Logger.log(`Starting conversion to office for all files for ${userEmail}`)
-  GOOGLE_TYPES.forEach(googleType => {
-    const converters =
-      getFilesByType(googleType).map((file) => createFileConverter(file))
-    conversionCount = converters
-      .map((fileConverter) => fileConverter.convertToOffice())
-      .reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        conversionCount
-      )
-  })
-
-  Logger.log(`Converted ${conversionCount} files total`)
+    this.mimeType = file.getMimeType();
+    this.file = file;
+  }
 }

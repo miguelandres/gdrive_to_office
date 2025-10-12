@@ -1,13 +1,25 @@
 {
   "compilerOptions": {
+    "target": "es2020",
     "lib": [
-      "esnext"
+      "es2020",
+      "dom"
     ],
-    "experimentalDecorators": true,
-    "strictNullChecks": true
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*",
+    "test/**/*",
+    "rollup.config.mjs"
   ]
 }
