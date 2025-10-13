@@ -27,6 +27,9 @@ import { createIteratorMock, MockUrlFetchApp } from './jest.setup';
 import { UnsupportedMimeTypeError } from '../src/errors';
 
 describe('GoogleFormatFile', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   // Constructor tests for supported mime types end up being exercised in
   // convertFileToGoogleFormatFile tests below
   it('throws exception for unsupported mime type', () => {
