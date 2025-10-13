@@ -15,83 +15,82 @@
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 // NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-// LIABLE FOR ANY CLAIM, DAMAGES OR DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// --- Native Flat Config Setup (No FlatCompat) ---
-
-import prettier from "eslint-plugin-prettier";
 import globals from "globals";
 import js from "@eslint/js";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-// NOTE: You must ensure 'eslint-config-prettier' is installed and up-to-date
+import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier";
 
-// FIX: Exporting the configuration array directly.
 export default [
-    // 1. Ignore files (equivalent to globalIgnores)
-    {
-        ignores: [
-            "template/**/*",
-            "template-ui/**/*",
-            "**/node_modules/*",
-            "**/dist/*",
-            "build/*",
-            "**/rollup.config.mjs",
-            "**/testing",
-        ],
+  // 1. Global ignores
+  {
+    ignores: [
+      "template/**/*",
+      "template-ui/**/*",
+      "**/node_modules/*",
+      "**/dist/*",
+      "build/*",
+      "**/rollup.config.mjs",
+      "**/testing",
+    ],
+  },
+
+  // 2. Core JS rules
+  js.configs.recommended,
+
+  // 3. TypeScript rules
+  ...tseslint.configs.recommended,
+
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: "./tsconfig.json",
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
-
-    // 2. Core JavaScript Rules (equivalent to part of gts/recommended)
-    js.configs.recommended,
-
-    // 3. TypeScript Configuration Block (equivalent to the TypeScript parts of gts)
-    {
-        files: ['**/*.ts', '**/*.tsx'],
-
-        plugins: {
-            '@typescript-eslint': tseslint,
-            prettier,
-        },
-
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node,
-            },
-
-            parser: tsParser, // Set the TypeScript parser
-            ecmaVersion: "latest",
-            sourceType: "module",
-
-            parserOptions: {
-                project: "./tsconfig.json",
-                // If you removed path/dirname imports, these are no longer needed:
-                // __filename: false,
-                // __dirname: false,
-            },
-        },
-
-        // Apply TypeScript Recommended Rules
-        extends: [tseslint.configs.recommended],
-
-        rules: {
-            // Your custom rules
-            "prettier/prettier": "error",
-            "@typescript-eslint/no-unused-vars": ["error", {
-                args: "all",
-                argsIgnorePattern: "^_",
-                caughtErrors: "all",
-                caughtErrorsIgnorePattern: "^_",
-                destructuredArrayIgnorePattern: "^_",
-                varsIgnorePattern: "^_",
-                ignoreRestSiblings: true,
-            }],
-        },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
     },
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
+      "@typescript-eslint/no-floating-promises": "error",
+    },
+  },
 
-    // 4. Prettier Config (must be last to disable conflicting rules)
-    prettierConfig
+  // 4. Prettier config (disable conflicting rules)
+  prettierConfig,
+
+  // 5. Run Prettier as a rule
+  {
+    files: ["**/*.{js,ts,tsx}"],
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    rules: {
+      "prettier/prettier": ["error", { endOfLine: "auto" }],
+    },
+  },
 ];

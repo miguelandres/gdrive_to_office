@@ -19,7 +19,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { buildGoogleFormatFileFromFile, GoogleFormatFile } from './google_format_file';
+import { getFilesByType } from './files';
+import {
+  buildGoogleFormatFileFromFile,
+  GoogleFormatFile,
+} from './google_format_file';
 import { SupportedMimeType } from './mime_types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,14 +32,16 @@ function convertToOffice() {
   let conversionCount = 0;
 
   Logger.log(`Starting conversion to office for all files for ${userEmail}`);
-  [SupportedMimeType.GOOGLE_DOCS, SupportedMimeType.GOOGLE_SHEETS, SupportedMimeType.GOOGLE_SLIDES].forEach(googleType => {
-    const allGoogleFiles: GoogleFormatFile[] =
-      getFilesByType(googleType).
-        map(buildGoogleFormatFileFromFile)
-        .filter(Boolean);
+  [
+    SupportedMimeType.GOOGLE_DOCS,
+    SupportedMimeType.GOOGLE_SHEETS,
+    SupportedMimeType.GOOGLE_SLIDES,
+  ].forEach(googleType => {
+    const allGoogleFiles: GoogleFormatFile[] = getFilesByType(googleType)
+      .map(file => buildGoogleFormatFileFromFile(file))
+      .filter((file): file is GoogleFormatFile => file !== undefined);
 
-    conversionCount += allGoogleFiles
-      .flatMap(file => file.convert()).length;
+    conversionCount += allGoogleFiles.flatMap(file => file.convert()).length;
   });
 
   Logger.log(`Converted ${conversionCount} files total`);
