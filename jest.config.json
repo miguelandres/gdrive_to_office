@@ -11,5 +11,8 @@
   ],
   "moduleNameMapper": {
     "(.+)\\.js": "$1"
-  }
+  },
+  "setupFilesAfterEnv": [
+    "<rootDir>/test/jest.setup.ts"
+  ]
 }
