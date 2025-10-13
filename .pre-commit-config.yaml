@@ -60,11 +60,6 @@ repos:
       - id: forbid-tabs
       - id: remove-tabs
         args: ["--whitespaces-count", "2"]
-      - id: insert-license
-        files: \.ts$
-        args:
-          - --comment-style
-          - //
   - repo: local
     hooks:
       - id: npm-lint
