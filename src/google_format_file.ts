@@ -49,14 +49,17 @@ export class GoogleFormatFile {
     this.lastUpdated = file.getLastUpdated();
     switch (this.mimeType) {
       case SupportedMimeType.GOOGLE_DOCS:
+        Logger.log(`Creating GoogleFormatFile for Doc "${this.name}"`);
         this.officeEquivalentMimeType = SupportedMimeType.OFFICE_WORD;
         this.officeEquivalentFileName = `${this.name}.docx`;
         break;
       case SupportedMimeType.GOOGLE_SHEETS:
+        Logger.log(`Creating GoogleFormatFile for Spreadsheet "${this.name}"`);
         this.officeEquivalentMimeType = SupportedMimeType.OFFICE_EXCEL;
         this.officeEquivalentFileName = `${this.name}.xlsx`;
         break;
       case SupportedMimeType.GOOGLE_SLIDES:
+        Logger.log(`Creating GoogleFormatFile for Presentation "${this.name}"`);
         this.officeEquivalentMimeType = SupportedMimeType.OFFICE_POWERPOINT;
         this.officeEquivalentFileName = `${this.name}.pptx`;
         break;
