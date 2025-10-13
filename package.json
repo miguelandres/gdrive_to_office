@@ -39,7 +39,6 @@
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "gasmask": "^1.3.12",
     "gts": "^6.0.2",
     "jest": "^30.2.0",
     "license-check-and-add": "^4.0.5",
