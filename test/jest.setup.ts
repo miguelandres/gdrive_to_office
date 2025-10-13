@@ -20,6 +20,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 import util from 'util';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createIteratorMock = (files: any[]) => {
   let index = 0;
   return {
@@ -69,6 +70,7 @@ export const MockUrlFetchApp = {
 class ConsoleLoggerWithRecord {
   logs: string[] = [];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public log(message: any, ...args: any[]) {
     let formatted: string;
     if (args.length > 0 && typeof message === 'string') {

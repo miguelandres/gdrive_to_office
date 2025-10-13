@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Miguel Barreto and others
+// Copyright (c) 2025 Miguel Barreto and others
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -19,16 +19,11 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-class UnsupportedMimeTypeError extends Error {
-  file: GoogleAppsScript.Drive.File;
-  mimeType: string;
-  constructor(file: GoogleAppsScript.Drive.File) {
-    super(
-      `File ${file.getName()} has unsupported MIME type ${file.getMimeType()}`
-    );
-
-    this.mimeType = file.getMimeType();
-    this.file = file;
-  }
+export enum SupportedMimeType {
+  GOOGLE_DOCS = 'application/vnd.google-apps.document',
+  GOOGLE_SHEETS = 'application/vnd.google-apps.spreadsheet',
+  GOOGLE_SLIDES = 'application/vnd.google-apps.presentation',
+  OFFICE_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  OFFICE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  OFFICE_POWERPOINT = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Miguel Barreto and others
+// Copyright (c) 2025 Miguel Barreto and others
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -19,8 +19,8 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import { createFileConverter } from './FileConverter';
-import { getFilesByType } from './GoogleDriveFileUtilities';
+import { buildGoogleFormatFileFromFile, GoogleFormatFile } from './google_format_file';
+import { SupportedMimeType } from './mime_types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function convertToOffice() {
@@ -28,16 +28,14 @@ function convertToOffice() {
   let conversionCount = 0;
 
   Logger.log(`Starting conversion to office for all files for ${userEmail}`);
-  GOOGLE_TYPES.forEach(googleType => {
-    const converters = getFilesByType(googleType).map(file =>
-      createFileConverter(file)
-    );
-    conversionCount = converters
-      .map(fileConverter => fileConverter.convertToOffice())
-      .reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        conversionCount
-      );
+  [SupportedMimeType.GOOGLE_DOCS, SupportedMimeType.GOOGLE_SHEETS, SupportedMimeType.GOOGLE_SLIDES].forEach(googleType => {
+    const allGoogleFiles: GoogleFormatFile[] =
+      getFilesByType(googleType).
+        map(buildGoogleFormatFileFromFile)
+        .filter(Boolean);
+
+    conversionCount += allGoogleFiles
+      .flatMap(file => file.convert()).length;
   });
 
   Logger.log(`Converted ${conversionCount} files total`);

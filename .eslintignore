@@ -1,5 +1,0 @@
-**/node_modules/*
-**/dist/*
-build/*
-rollup.config.mjs
-testing
