@@ -84,19 +84,29 @@ export class GoogleFormatFile {
           );
           return undefined;
         } else {
-          const conversionUrl = `https://www.googleapis.com/drive/v3/files/${this.id}/export?mimeType=${this.officeEquivalentMimeType}`;
-          const blob = UrlFetchApp.fetch(conversionUrl, {
-            method: 'get',
-            headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
-            muteHttpExceptions: true,
-          }).getBlob();
-          const createdFile = folder
-            .createFile(blob)
-            .setName(this.officeEquivalentFileName);
           Logger.log(
-            `Created file ${this.officeEquivalentFileName} in ${folderName}`
+            `Starting conversion of ${this.officeEquivalentFileName} in ${folderName}`
           );
-          return createdFile;
+          try {
+            const conversionUrl = `https://www.googleapis.com/drive/v3/files/${this.id}/export?mimeType=${this.officeEquivalentMimeType}`;
+            const blob = UrlFetchApp.fetch(conversionUrl, {
+              method: 'get',
+              headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+              muteHttpExceptions: true,
+            }).getBlob();
+            const createdFile = folder
+              .createFile(blob)
+              .setName(this.officeEquivalentFileName);
+            Logger.log(
+              `Created file ${this.officeEquivalentFileName} in ${folderName}`
+            );
+            return createdFile;
+          } catch (e) {
+            Logger.log(
+              `Error converting file ${this.name} in ${folderName}: ${e}`
+            );
+            return undefined;
+          }
         }
       })
       .filter(Boolean) as GoogleAppsScript.Drive.File[];

@@ -27,7 +27,7 @@ import {
 import { SupportedMimeType } from './mime_types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function convertToOffice() {
+function convertAllGoogleFilesToOffice() {
   const userEmail = Session.getEffectiveUser().getEmail();
   let conversionCount = 0;
 
@@ -37,9 +37,12 @@ function convertToOffice() {
     SupportedMimeType.GOOGLE_SHEETS,
     SupportedMimeType.GOOGLE_SLIDES,
   ].forEach(googleType => {
-    const allGoogleFiles: GoogleFormatFile[] = getFilesByType(googleType)
+    const foundFiles = getFilesByType(googleType);
+    Logger.log(`Found ${foundFiles.length} files of type ${googleType}`);
+    const allGoogleFiles: GoogleFormatFile[] = foundFiles
       .map(file => buildGoogleFormatFileFromFile(file))
       .filter((file): file is GoogleFormatFile => file !== undefined);
+    Logger.log(`Built ${allGoogleFiles.length} GoogleFormatFile instances`);
 
     conversionCount += allGoogleFiles.flatMap(file => file.convert()).length;
   });
