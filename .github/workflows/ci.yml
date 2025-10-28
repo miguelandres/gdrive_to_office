@@ -1,4 +1,6 @@
 name: Build and test
+permissions:
+  contents: read
 
 # Controls when the workflow should run
 on:
