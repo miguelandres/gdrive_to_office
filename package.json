@@ -39,7 +39,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "gts": "^6.0.2",
+    "gts": "^7.0.0",
     "jest": "^30.2.0",
     "license-check-and-add": "^4.0.5",
     "rollup-plugin-iife": "^0.7.1",
