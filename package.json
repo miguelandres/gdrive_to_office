@@ -24,7 +24,7 @@
     "@types/jest": "^30.0.0",
     "dayjs": "^1.11.19",
     "ncp": "^2.0.0",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "rimraf": "^6.1.2",
     "rollup": "^4.57.1",
     "rollup-plugin-cleanup": "^3.2.1",
