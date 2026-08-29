@@ -1,68 +1,127 @@
-# Convert Google Docs/Slides/Sheets to Office
+# Google Drive to Office Converter
 
 [![Build and test](https://github.com/miguelandres/gdrive_to_office/actions/workflows/ci.yml/badge.svg)](https://github.com/miguelandres/gdrive_to_office/actions/workflows/ci.yml)
 [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE.txt)
 
-This is a Google Apps Script script written in TypeScript using [clasp](https://github.com/clasp/clasp)
-that allows the user to convert all Google Docs/Slides/Sheets into Microsoft
-Office formats
+A Google Apps Script written in TypeScript using [clasp](https://github.com/google/clasp) that automatically converts Google Docs, Google Sheets, and Google Slides in your Google Drive into Microsoft Office formats (`.docx`, `.xlsx`, `.pptx`).
 
-I plan to add logic for conversion in the opposite direction but it has not
-been a priority.
 > [!CAUTION]
-> By nature this is a risky script to run. I have taken precautions to minimize
-> the dangerous operations but, run it at your own risk and review the code.
+> This script performs bulk file creation across your Google Drive. Precautions have been built in to prevent accidental overwrites and unintended folder modifications, but please review the code and run at your own risk.
 
-## Risk Minimization
+---
 
-- The script will only create copies of documents in directories you own.
-- The script will only create an office version of your document if there is no
-  office file with the same name that has a newer timestamp.
+## Supported Conversions
 
-## Development
+| Google Workspace Format | Microsoft Office Format | Extension |
+| :---------------------- | :---------------------- | :-------- |
+| Google Docs             | Microsoft Word          | `.docx`   |
+| Google Sheets           | Microsoft Excel         | `.xlsx`   |
+| Google Slides           | Microsoft PowerPoint    | `.pptx`   |
 
-Make sure you [enable the Google Apps Script API for your Google Account](https://script.google.com/home/usersettings).
+---
+
+## Safety & Risk Minimization
+
+- **Ownership Restriction**: By default, the script only creates converted files inside folders you own, preventing accidental file pollution in shared or team drives.
+- **Timestamp Protection**: If an Office file with the target name already exists and has a timestamp newer than the Google file, conversion is skipped to avoid overwriting recent changes.
+- **Non-Destructive**: The original Google Docs, Sheets, and Slides files are never modified or deleted. Converted Office files are placed directly alongside the originals.
+
+---
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 22 or later recommended) and `npm`
+- A Google Account with the [Google Apps Script API enabled](https://script.google.com/home/usersettings)
+
+---
+
+## Setup & Installation
+
+### 1. Clone the repository and install dependencies
 
 ```sh
-# Install clasp
-npm install -g @google/clasp
+git clone https://github.com/miguelandres/gdrive_to_office.git
+cd gdrive_to_office
+npm install
 
-# Login into your google account with clasp
+npm install -g @google/clasp  
+```
+
+### 2. Log in with clasp
+
+Authenticate `clasp` with your Google account:
+
+```sh
 clasp login
 ```
 
-### Setting up your own Google script
+### 3. Configure your Google Apps Script project
 
-For anyone other than the original author, please remove the `.clasp-dev.json`
-and `.clasp-prod.json` files and initialize them again using clasp create.
+The repository includes `.clasp-dev.json` and `.clasp-prod.json` templates. If you are setting up your own instance of the script:
 
-This clasp configuration is set to my own instance of the script on my Google
-account to which you likely have no access.
+1. Create a new standalone Google Apps Script project in your Google account:
 
-Therefore run the following commands before doing anything
+   ```sh
+   clasp create --title "GDrive to Office Converter" --type standalone --rootDir dist
+   ```
 
-```sh
-rm .clasp.json
-# Create a new standalone script in your account
-clasp create
-```
+2. Note the generated `scriptId` from the resulting `.clasp.json` file.
+3. Update `.clasp-dev.json` and `.clasp-prod.json` with your project's `scriptId`:
 
-## Run Lint
+   ```json
+   {
+     "scriptId": "YOUR_SCRIPT_ID_HERE",
+     "rootDir": "dist"
+   }
+   ```
 
-```sh
-npm run lint
-```
+---
 
-## Run Tests
+## Deployment & Execution
 
-```sh
-npm run test
-```
+### Deploy to Google Apps Script
 
-## Deploy
+To bundle and deploy the script to your development or production Apps Script project:
 
 ```sh
+# Deploy to development project (.clasp-dev.json)
 npm run deploy
 
+# Deploy to production project (.clasp-prod.json)
 npm run deploy:prod
 ```
+
+### Run the Conversion
+
+1. Open your script project in the Google Apps Script web editor:
+
+   ```sh
+   npx clasp open
+   ```
+
+2. Select the `convertAllGoogleFilesToOffice` function from the function dropdown at the top.
+3. Click **Run**.
+4. On first run, Google will prompt you to authorize the necessary Drive and external request permissions.
+5. Check the **Execution log** at the bottom to view the conversion progress and file counts.
+
+> [!TIP]
+> You can schedule automatic conversions by setting up a time-driven trigger in the Google Apps Script dashboard (**Triggers** > **Add Trigger** > select `convertAllGoogleFilesToOffice` > choose time-based schedule).
+
+---
+
+## Development Scripts
+
+| Command               | Description                                                                  |
+| :-------------------- | :--------------------------------------------------------------------------- |
+| `npm run build`       | Cleans `dist/`, bundles TypeScript via Rollup, and copies `appsscript.json`  |
+| `npm run lint`        | Checks license headers and runs ESLint with auto-fix                         |
+| `npm run test`        | Runs unit tests using Jest                                                   |
+| `npm run deploy`      | Runs lint, test, build, copies `.clasp-dev.json`, and pushes to Apps Script  |
+| `npm run deploy:prod` | Runs lint, test, build, copies `.clasp-prod.json`, and pushes to Apps Script |
+
+---
+
+## License
+
+This project is licensed under the [Apache-2.0 License](LICENSE.txt).
