@@ -32,7 +32,7 @@
     "globals": "^17.14.0",
     "jest": "^30.5.2",
     "license-check-and-add": "^4.0.5",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "rimraf": "^6.1.4",
     "rollup": "^4.68.0",
     "rollup-plugin-cleanup": "^3.2.1",
